@@ -1,6 +1,6 @@
 # Tooth Detection with YOLOv8
 
-This project trains a YOLOv8 object detection model to identify teeth in intraoral dental images. The 32 target classes correspond to individual teeth as per the FDI World Dental Federation notation.
+This project trains a YOLOv8 and YOLOv11 object detection model to identify teeth in intraoral dental images. The 32 target classes correspond to individual teeth as per the FDI World Dental Federation notation.
 
 ##  Dataset Structure
 
@@ -20,14 +20,14 @@ oralVista/
 └── data.yaml
 ```
 
-## 🏷️ Label Format
+##  Label Format
 
 Each label file contains YOLO annotations:
 ```
 <class_id> <x_center> <y_center> <width> <height>
 ```
 
-## 🔧 Environment Setup
+##  Environment Setup
 
 Recommended Python environment (Python 3.10+):
 ```bash
@@ -36,13 +36,26 @@ conda activate venv_cuda
 pip install ultralytics opencv-python pandas matplotlib seaborn scikit-learn
 ```
 
-## 🚀 Training Command
+##  Training Command
 
-We used the YOLOv8m model for training.
+We used the YOLOv11s model for training.
 
-```bash
-yolo task=detect mode=train model=yolov8m.pt data=/content/drive/MyDrive/oralVista/data.yaml \
-     epochs=100 imgsz=640 batch=16 device=0 workers=8 name=oralvista-v1
+```python
+from ultralytics import YOLO
+
+WEIGHTS = "yolo11s.pt"
+model = YOLO(WEIGHTS)
+
+model.train(
+    data="/content/drive/MyDrive/oralVista/split_data/data.yaml",
+    imgsz=640,
+    epochs=100,
+    batch=16,
+    device="cuda:0",
+    workers=2,
+)
+
+ 
 ```
 
 ## 📤 Inference on Validation & Test Sets
